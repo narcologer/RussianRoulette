@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -18,12 +19,16 @@ import java.util.Random;
 
 public class MainActivity extends Activity {
     private SoundPool sounds;
+    private TextView id_pulls;
+    private TextView id_shots;
+    private int pulls;
+    private int shots;
     private int sound_shot;
     private int sound_shot_false;
     private int sound_baraban;
     private ImageView blood_image;
     private int on_shot = 3;
-    private int max_number = 5;
+    private int max_number = 10;
     private int random = 0;
 
     @Override
@@ -68,7 +73,10 @@ public class MainActivity extends Activity {
     private void init()
     {
         blood_image = findViewById(R.id.image_blood);
-
+        id_pulls = findViewById(R.id.id_pulls);
+        id_shots = findViewById(R.id.id_shots);
+        pulls=0;
+        shots=0;
     }
 
     public void onClickMic(View view) {
@@ -93,11 +101,16 @@ public class MainActivity extends Activity {
                             {
                                 sounds.play(sound_shot,1.0f,1.0f,1,0,1);
                                 blood_image.setVisibility(View.VISIBLE);
+                                pulls=0;
+                                shots=shots+1;
                             }
                             else
                             {
                                 sounds.play(sound_shot_false,1.0f,1.0f,1,0,1);
+                                pulls=pulls+1;
                             }
+                            id_pulls.setText("Pulls: "+pulls);
+                            id_shots.setText("Shots: "+shots);
                             break;
                         case "барабан":
                             sounds.play(sound_baraban,1.0f,1.0f,1,0,1);
