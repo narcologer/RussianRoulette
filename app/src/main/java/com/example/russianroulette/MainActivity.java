@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.drawable.AnimationDrawable;
@@ -113,6 +114,8 @@ public class MainActivity extends Activity {
                                 AnimationDrawable gunFire = (AnimationDrawable) gun.getBackground();
                                 gun.postDelayed(new Runnable() {
                                     public void run() {
+                                        if (gunFire.isRunning())
+                                            gunFire.stop();
                                         gunFire.start();
                                     }
                                 }, 200);
@@ -127,6 +130,8 @@ public class MainActivity extends Activity {
                                 AnimationDrawable gunPull = (AnimationDrawable) gun.getBackground();
                                 gun.postDelayed(new Runnable() {
                                     public void run() {
+                                        if (gunPull.isRunning())
+                                            gunPull.stop();
                                         gunPull.start();
                                     }
                                 }, 200);
@@ -140,7 +145,10 @@ public class MainActivity extends Activity {
                             gun.setBackgroundResource(R.drawable.baraban_animation);
                             AnimationDrawable gunBaraban = (AnimationDrawable) gun.getBackground();
                             gun.postDelayed(new Runnable() {
-                                public void run() {
+                                public void run()
+                                {
+                                    if (gunBaraban.isRunning())
+                                        gunBaraban.stop();
                                     gunBaraban.start();
                                 }
                             }, 200);
