@@ -12,6 +12,7 @@ import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.drawable.AnimationDrawable;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -26,6 +27,7 @@ public class MainActivity extends Activity {
     private int sound_shot;
     private int sound_shot_false;
     private int sound_baraban;
+    private ImageView gun;
     private ImageView blood_image;
     private int on_shot = 3;
     private int max_number = 10;
@@ -72,11 +74,19 @@ public class MainActivity extends Activity {
 
     private void init()
     {
+        gun = findViewById(R.id.gun);
         blood_image = findViewById(R.id.image_blood);
         id_pulls = findViewById(R.id.id_pulls);
         id_shots = findViewById(R.id.id_shots);
         pulls=0;
         shots=0;
+        gun.setBackgroundResource(R.drawable.baraban_animation);
+        AnimationDrawable gunBaraban = (AnimationDrawable) gun.getBackground();
+        gun.postDelayed(new Runnable() {
+            public void run() {
+                gunBaraban.start();
+            }
+        }, 200);
     }
 
     public void onClickMic(View view) {
@@ -99,6 +109,13 @@ public class MainActivity extends Activity {
                         case "огонь":
                             if(random == on_shot )
                             {
+                                gun.setBackgroundResource(R.drawable.fire_animation);
+                                AnimationDrawable gunFire = (AnimationDrawable) gun.getBackground();
+                                gun.postDelayed(new Runnable() {
+                                    public void run() {
+                                        gunFire.start();
+                                    }
+                                }, 200);
                                 sounds.play(sound_shot,1.0f,1.0f,1,0,1);
                                 blood_image.setVisibility(View.VISIBLE);
                                 pulls=0;
@@ -106,6 +123,13 @@ public class MainActivity extends Activity {
                             }
                             else
                             {
+                                gun.setBackgroundResource(R.drawable.pull_animation);
+                                AnimationDrawable gunPull = (AnimationDrawable) gun.getBackground();
+                                gun.postDelayed(new Runnable() {
+                                    public void run() {
+                                        gunPull.start();
+                                    }
+                                }, 200);
                                 sounds.play(sound_shot_false,1.0f,1.0f,1,0,1);
                                 pulls=pulls+1;
                             }
@@ -113,6 +137,13 @@ public class MainActivity extends Activity {
                             id_shots.setText("Shots: "+shots);
                             break;
                         case "барабан":
+                            gun.setBackgroundResource(R.drawable.baraban_animation);
+                            AnimationDrawable gunBaraban = (AnimationDrawable) gun.getBackground();
+                            gun.postDelayed(new Runnable() {
+                                public void run() {
+                                    gunBaraban.start();
+                                }
+                            }, 200);
                             sounds.play(sound_baraban,1.0f,1.0f,1,0,1);
                             blood_image.setVisibility(View.GONE);
                             random = new Random().nextInt(max_number);
