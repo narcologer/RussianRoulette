@@ -2,6 +2,7 @@ package com.example.russianroulette;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -14,6 +15,8 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.drawable.AnimationDrawable;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -29,7 +32,6 @@ public class MainActivity extends Activity {
     private int sound_shot_false;
     private int sound_baraban;
     private ImageView gun;
-    private ImageView blood_image;
     private int on_shot = 3;
     private int max_number = 10;
     private int random = 0;
@@ -76,7 +78,6 @@ public class MainActivity extends Activity {
     private void init()
     {
         gun = findViewById(R.id.gun);
-        blood_image = findViewById(R.id.image_blood);
         id_pulls = findViewById(R.id.id_pulls);
         id_shots = findViewById(R.id.id_shots);
         pulls=0;
@@ -120,7 +121,6 @@ public class MainActivity extends Activity {
                                     }
                                 }, 200);
                                 sounds.play(sound_shot,1.0f,1.0f,1,0,1);
-                                blood_image.setVisibility(View.VISIBLE);
                                 pulls=0;
                                 shots=shots+1;
                             }
@@ -153,11 +153,22 @@ public class MainActivity extends Activity {
                                 }
                             }, 200);
                             sounds.play(sound_baraban,1.0f,1.0f,1,0,1);
-                            blood_image.setVisibility(View.GONE);
                             random = new Random().nextInt(max_number);
                             break;
                     }
             }
         }
+    }
+
+    public void onClickReference(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Help")
+                .setMessage("Commands: \"барабан\" - generate random number. \n \"огонь\" - pull the trigger. If generated number equals certain value it will make shot.")
+                .setPositiveButton("Got it", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
     }
 }

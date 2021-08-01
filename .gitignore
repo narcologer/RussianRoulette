@@ -1,5 +1,6 @@
 *.iml
 .gradle
+gun_nontrans
 /local.properties
 /.idea
 /.gradle
