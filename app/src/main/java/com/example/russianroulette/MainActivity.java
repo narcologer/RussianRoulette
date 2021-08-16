@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
     private ImageView gun;
     private int on_shot = 3;
     private int max_number = 10;
-    private int random = 0;
+    private int random;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +89,7 @@ public class MainActivity extends Activity {
                 gunBaraban.start();
             }
         }, 200);
+        random = new Random().nextInt(max_number);
     }
 
     public void onClickMic(View view) {
@@ -138,6 +139,10 @@ public class MainActivity extends Activity {
                                 sounds.play(sound_shot_false,1.0f,1.0f,1,0,1);
                                 pulls=pulls+1;
                             }
+                            random++;
+                            if (random>max_number) {
+                                random=0;
+                            }
                             id_pulls.setText("Pulls: "+pulls);
                             id_shots.setText("Shots: "+shots);
                             break;
@@ -163,7 +168,7 @@ public class MainActivity extends Activity {
     public void onClickReference(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Help")
-                .setMessage("Commands: \"барабан\" - generate random number. \n \"огонь\" - pull the trigger. If generated number equals certain value it will make shot.")
+                .setMessage("Commands: \"барабан\" - put random value in current_slot. \n \"огонь\" - pull the trigger and increase current_slot by 1 (if it>max_value it'll go back to zero). If current_slot equals certain value it will make shot.")
                 .setPositiveButton("Got it", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
