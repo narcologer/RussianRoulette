@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.drawable.AnimationDrawable;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -34,7 +35,7 @@ public class MainActivity extends Activity {
     private ImageView gun;
     private int on_shot = 3;
     private int max_number = 10;
-    private int random;
+    private int current_slot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class MainActivity extends Activity {
                 gunBaraban.start();
             }
         }, 200);
-        random = new Random().nextInt(max_number);
+        current_slot = new Random().nextInt(max_number);
     }
 
     public void onClickMic(View view) {
@@ -110,8 +111,13 @@ public class MainActivity extends Activity {
                     ArrayList<String> text =  data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     switch(text.get(0)){
                         case "огонь":
-                            if(random == on_shot )
+                            if (on_shot==-1)
                             {
+                                Toast.makeText(this,"Say \"baraban\" to restart the game", Toast.LENGTH_SHORT).show();
+                            }
+                                else
+                            {
+                            if (current_slot == on_shot) {
                                 gun.setBackgroundResource(R.drawable.fire_animation);
                                 AnimationDrawable gunFire = (AnimationDrawable) gun.getBackground();
                                 gun.postDelayed(new Runnable() {
@@ -121,12 +127,11 @@ public class MainActivity extends Activity {
                                         gunFire.start();
                                     }
                                 }, 200);
-                                sounds.play(sound_shot,1.0f,1.0f,1,0,1);
-                                pulls=0;
-                                shots=shots+1;
-                            }
-                            else
-                            {
+                                sounds.play(sound_shot, 1.0f, 1.0f, 1, 0, 1);
+                                pulls = 0;
+                                shots = shots + 1;
+                                on_shot = -1;
+                            } else {
                                 gun.setBackgroundResource(R.drawable.pull_animation);
                                 AnimationDrawable gunPull = (AnimationDrawable) gun.getBackground();
                                 gun.postDelayed(new Runnable() {
@@ -136,15 +141,16 @@ public class MainActivity extends Activity {
                                         gunPull.start();
                                     }
                                 }, 200);
-                                sounds.play(sound_shot_false,1.0f,1.0f,1,0,1);
-                                pulls=pulls+1;
+                                sounds.play(sound_shot_false, 1.0f, 1.0f, 1, 0, 1);
+                                pulls = pulls + 1;
                             }
-                            random++;
-                            if (random>max_number) {
-                                random=0;
+                            current_slot++;
+                            if (current_slot > max_number) {
+                                current_slot = 0;
                             }
-                            id_pulls.setText("Pulls: "+pulls);
-                            id_shots.setText("Shots: "+shots);
+                            id_pulls.setText("Pulls: " + pulls);
+                            id_shots.setText("Shots: " + shots);
+                        }
                             break;
                         case "барабан":
                             gun.setBackgroundResource(R.drawable.baraban_animation);
@@ -158,7 +164,9 @@ public class MainActivity extends Activity {
                                 }
                             }, 200);
                             sounds.play(sound_baraban,1.0f,1.0f,1,0,1);
-                            random = new Random().nextInt(max_number);
+                            current_slot = new Random().nextInt(max_number);
+                            on_shot = new Random().nextInt(max_number);
+                            Toast.makeText(this,"Bullet position changed", Toast.LENGTH_SHORT).show();
                             break;
                     }
             }
@@ -168,7 +176,7 @@ public class MainActivity extends Activity {
     public void onClickReference(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Help")
-                .setMessage("Commands: \"барабан\" - put random value in current_slot. \n \"огонь\" - pull the trigger and increase current_slot by 1 (if it>max_value it'll go back to zero). If current_slot equals certain value it will make shot.")
+                .setMessage("Commands: \"барабан\" - put random value in current_slot and on_shot. \n \"огонь\" - pull the trigger and increase current_slot by 1 (if it>max_value it'll go back to zero). If current_slot equals on_shot it will make shot and set on_shot to -1")
                 .setPositiveButton("Got it", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
